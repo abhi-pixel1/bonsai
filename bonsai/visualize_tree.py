@@ -39,4 +39,3 @@ with open('sample1.json', 'r') as file:
     sample = json.load(file)
 
 see_tree(sample)
-# print(sample[list(sample.keys())[0]][:-1])
