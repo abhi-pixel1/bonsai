@@ -7,3 +7,4 @@ def cli():
 
 
 cli.add_command(commands.tree)
+cli.add_command(commands.relative)
