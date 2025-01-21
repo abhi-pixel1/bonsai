@@ -55,6 +55,19 @@
 
 import os
 
+
+
+def validate_directory(func):
+    def inner(root):
+        if os.path.isdir(root):
+            return func(root)
+        else:
+            raise Exception(f"Directory '{root}' does not exist.")
+    return inner
+
+
+
+
 def check_file_access(filepath):
     try:
         readable = os.access(filepath, os.R_OK)
@@ -71,6 +84,7 @@ def check_file_access(filepath):
         return f"{os.path.basename(filepath)} (*)"  # Skip errors safely
 
 
+@validate_directory
 def generate_directory_tree(root):
     walker = next(os.walk(root))
     sub_dirs = walker[1]
