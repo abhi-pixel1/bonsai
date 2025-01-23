@@ -1,8 +1,11 @@
-from bonsai.core import generate_directory_tree
+from bonsai.core import generate_directory_tree, visualize_tree
 import json
 
 
 if __name__ == '__main__':
-  d = json.dumps(generate_directory_tree('C:\\Users\\abhin\\Desktop\\'), indent=4)
+  dict = generate_directory_tree('C:\\Users\\abhin\\Desktop\\')
+  # print(dict)
+  json1 = json.dumps(dict, indent=4)
+  print(visualize_tree(generate_directory_tree('C:\\Users\\abhin\\Desktop\\')))
   with open("sample.json",'w') as f:
-    f.write(d)
+    f.write(json1)
