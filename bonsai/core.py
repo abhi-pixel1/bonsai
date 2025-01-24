@@ -135,6 +135,14 @@
 
 import os
 import stat
+from colorama import Fore, Style
+
+# Box-drawing characters using Unicode
+VERTICAL = '\u2502'       # │
+HORIZONTAL = '\u2500'     # ─
+T_JUNCTION = '\u251C'     # ├
+L_JUNCTION = '\u2514'     # └
+
 
 def file_permissions(filepath: str) -> str:
     """
@@ -243,6 +251,86 @@ def generate_directory_tree(root: str) -> dict:
     # Call the private recursive helper function
     return _generate_directory_tree_recursive(root)
 
+# def visualize_tree(
+#     json_tree_object: dict,
+#     show_permissions=False,
+#     show_size=False
+# )->str:
+#     """
+#     Public function to visualize a directory tree.
+#     It calls a private helper function to handle recursion.
+
+#     Args:
+#         json_tree_object (dict): The directory tree object.
+#         show_permissions (bool): Whether to include file permissions.
+#         show_size (bool): Whether to include file sizes.
+
+#     Returns:
+#         str: The visualized directory tree as a string.
+#     """
+#     def _visualize_tree_recursive(
+#             json_tree_object: dict,
+#             indent=0, 
+#             branch_positions=None, 
+#             last_branch=None
+#     ) -> str:
+#         if branch_positions is None:
+#             branch_positions = []
+
+#         # Prefix construction
+#         prefix = ""
+#         for i in range(indent):
+#             if i * 4 in branch_positions:
+#                 prefix += f"{VERTICAL}   " # Vertical line for continuing branches
+#             else:
+#                 prefix += "    "
+
+#         if last_branch:
+#             prefix += f"{L_JUNCTION}{HORIZONTAL * 2} "  # L-junction for the last branch
+#         else:
+#             prefix += f"{T_JUNCTION}{HORIZONTAL * 2} "  # T-junction for intermediate branches
+
+#         # Extract current directory or file name
+#         dir_name = list(json_tree_object.keys())[0]
+#         temp_tree = prefix + Fore.BLUE + dir_name + Style.RESET_ALL + "\n"
+
+#         # Get subdirectories and files
+#         sub_dirs_and_files = json_tree_object[dir_name]
+#         sub_dirs = sub_dirs_and_files[:-1] if len(sub_dirs_and_files) > 1 else []
+#         files = sub_dirs_and_files[-1] if sub_dirs_and_files else []
+
+#         # Update branch_positions for the current level
+#         new_branch_positions = branch_positions + [indent * 4]
+
+#         # Process subdirectories
+#         for i, sub_dir in enumerate(sub_dirs):
+#             is_last = i == len(sub_dirs) - 1 and not files
+#             temp_tree += _visualize_tree_recursive(sub_dir, indent + 1, new_branch_positions, is_last)
+
+#         # Process files
+#         if files:
+#             for i, file in enumerate(files):
+#                 is_last = i == len(files) - 1
+#                 file_prefix = ""
+#                 for j in range(indent + 1):
+#                     if j * 4 in new_branch_positions:
+#                         file_prefix += f"{VERTICAL}   "  # Vertical line for continuing branches
+#                     else:
+#                         file_prefix += "    "
+#                 file_prefix += f"{L_JUNCTION}{HORIZONTAL * 2} " if is_last else f"{T_JUNCTION}{HORIZONTAL * 2} "
+#                 file_info = Fore.GREEN + file[0] + Style.RESET_ALL  # File name
+#                 if show_permissions:
+#                     file_info += f" [{file[1]}]"  # File permissions
+#                 if show_size:
+#                     file_info += f" {round(file[2])}kb"  # File size in KB
+#                 temp_tree += f"{file_prefix} {file_info}\n"
+
+#         return temp_tree
+    
+#     # Call the private helper function with initial values
+#     return _visualize_tree_recursive(json_tree_object, last_branch=True)
+
+
 def visualize_tree(
     json_tree_object: dict,
     show_permissions=False,
@@ -264,27 +352,28 @@ def visualize_tree(
             json_tree_object: dict,
             indent=0, 
             branch_positions=None, 
-            last_branch=None
+            is_last_branch=None
     ) -> str:
         if branch_positions is None:
             branch_positions = []
 
         # Prefix construction
         prefix = ""
-        for i in range(indent):
-            if i * 4 in branch_positions:
-                prefix += "|   "
-            else:
-                prefix += "    "
+        if indent > 0:  # Skip prefix for the root directory
+            for i in range(indent - 1):
+                if i * 4 in branch_positions:
+                    prefix += f"{VERTICAL}   " # Vertical line for continuing branches
+                else:
+                    prefix += "    "
 
-        if last_branch:
-            prefix += "+--- "
-        else:
-            prefix += "|--- "
+            if is_last_branch is True:  # If it's the last branch at the current level
+                prefix += f"{L_JUNCTION}{HORIZONTAL * 2} "  # L-junction for the last branch
+            elif is_last_branch is False:
+                prefix += f"{T_JUNCTION}{HORIZONTAL * 2} "  # T-junction for intermediate branches
 
         # Extract current directory or file name
         dir_name = list(json_tree_object.keys())[0]
-        temp_tree = prefix + dir_name + "\n"
+        temp_tree = prefix + Fore.BLUE + dir_name + Style.RESET_ALL + "\n"
 
         # Get subdirectories and files
         sub_dirs_and_files = json_tree_object[dir_name]
@@ -304,23 +393,79 @@ def visualize_tree(
             for i, file in enumerate(files):
                 is_last = i == len(files) - 1
                 file_prefix = ""
-                for j in range(indent + 1):
+                for j in range(indent):
                     if j * 4 in new_branch_positions:
-                        file_prefix += "|   "
+                        file_prefix += f"{VERTICAL}   "  # Vertical line for continuing branches
                     else:
                         file_prefix += "    "
-                file_prefix += "+--- " if is_last else "|--- "
-                file_info = file[0]  # File name
+                file_prefix += f"{L_JUNCTION}{HORIZONTAL * 2} " if is_last else f"{T_JUNCTION}{HORIZONTAL * 2} "
+                file_info = Fore.GREEN + file[0] + Style.RESET_ALL  # File name
                 if show_permissions:
                     file_info += f" [{file[1]}]"  # File permissions
                 if show_size:
                     file_info += f" {round(file[2])}kb"  # File size in KB
-                temp_tree += f"{file_prefix} {file_info}\n"
+                temp_tree += f"{file_prefix}{file_info}\n"
 
         return temp_tree
     
     # Call the private helper function with initial values
-    return _visualize_tree_recursive(json_tree_object)
+    return _visualize_tree_recursive(json_tree_object, is_last_branch=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def get_relative_path(destination_path: str, base_path=None) -> str:
