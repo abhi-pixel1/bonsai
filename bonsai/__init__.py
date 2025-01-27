@@ -1,3 +1,3 @@
-from .core import visualize_tree
+from .core import visualize_tree,generate_directory_tree
 
-_all_ = ["visualize_tree"]
+_all_ = ["visualize_tree","generate_directory_tree"]
