@@ -1,3 +1,4 @@
+<img src="bonsai.png" alt="bonsai_dark.png" />
 
 # Bonsai: A Minimalist Directory Tree CLI Tool
 
