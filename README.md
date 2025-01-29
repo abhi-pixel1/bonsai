@@ -2,10 +2,10 @@
 <img src="bonsai_dark_long.png" width="800">
 </h1><br>
 
-# Bonsai: A Minimalist Directory Tree CLI Tool
+# Bonsai: A Minimalist Directory Tree CLI Tool & Python Library
 
 ## Overview
-Bonsai is a command-line interface (CLI) tool designed for working with directory structures in a clear, compact, and visual way. It allows users to generate directory trees, save them as JSON files, load them from JSON, and compute relative paths between directories. The name "Bonsai" reflects the tool's ability to take something complex, like a filesystem, and represent it in an organized and elegant manner.
+Bonsai is a command-line interface (CLI) tool and Python library designed for working with directory structures in a clear, compact, and visual way. It allows users to generate directory trees, save them as JSON files, load them from JSON, and compute relative paths between directories. The name "Bonsai" reflects the tool's ability to take something complex, like a filesystem, and represent it in an organized and elegant manner.
 
 ## Features
 - **Visualize Directory Trees**: Generate and display the structure of directories with optional details like file permissions and file sizes.
@@ -14,7 +14,9 @@ Bonsai is a command-line interface (CLI) tool designed for working with director
 
 - **Load from JSON**: Load a directory tree from a JSON file and visualize it.
 
-- **Relative Paths**: Compute the relative path between two directories.
+- **Python API**: Compute the relative path between two directories.
+
+- **Relative Paths**: Import Bonsai as a Python library for programmatic directory tree manipulation.
 
 ## Installation
 1. Clone the repository:
@@ -26,7 +28,8 @@ git clone https://github.com/abhi-pixel1/bonsai.git
 pip install .
 ```
 
-## Usage
+
+## CLI Usage
 The Bonsai CLI includes the following commands:
 1. ### `tree`
 Generates and displays the directory tree for a given directory.
@@ -109,6 +112,29 @@ bonsai relative [DESTINATION_PATH] [BASE_PATH]
 
 ```bash
 bonsai relative ./my_directory ./another_directory
+```
+
+## Python API Usage
+Bonsai can also be used as a Python library to generate and visualize directory trees programmatically.
+
+### Importing Bonsai
+```python
+from bonsai import generate_directory_tree, visualize_tree
+```
+
+### Generating a Directory Tree
+```python
+from bonsai import generate_directory_tree
+
+tree = generate_directory_tree("./my_directory")
+print(tree)
+```
+
+### Visualizing a Directory Tree
+```python
+from bonsai import visualize_tree
+
+print(visualize_tree(tree, show_permissions=True, show_size=True))
 ```
 
 ## Contributers:
