@@ -112,7 +112,7 @@ bonsai relative ./my_directory ./another_directory
 ```
 
 ## Contributers:
-<a href="https://github.com/othneildrew/Best-README-Template/graphs/contributors">
+<a href="https://github.com/abhi-pixel1/bonsai/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=abhi-pixel1/bonsai" alt="contrib.rocks image" />
 </a>
 
