@@ -115,6 +115,7 @@ bonsai relative ./my_directory ./another_directory
 <a href="https://github.com/abhi-pixel1/bonsai/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=abhi-pixel1/bonsai" />
 </a>
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
