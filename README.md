@@ -138,9 +138,7 @@ print(visualize_tree(tree, show_permissions=True, show_size=True))
 ```
 
 ## Contributers:
-<a href="https://github.com/abhi-pixel1/bonsai/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=abhi-pixel1/bonsai" />
-</a>
+[![Contributors](https://contrib.rocks/image?repo=abhi-pixel1/bonsai)](https://github.com/abhi-pixel1/bonsai/graphs/contributors)
 
 ## License
 
