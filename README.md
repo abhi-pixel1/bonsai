@@ -113,7 +113,7 @@ bonsai relative ./my_directory ./another_directory
 
 ## Contributers:
 <a href="https://github.com/abhi-pixel1/bonsai/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=abhi-pixel1/bonsai" alt="contrib.rocks image" />
+  <img src="https://contrib.rocks/image?repo=abhi-pixel1/bonsai" />
 </a>
 
 ## License
