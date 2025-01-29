@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="bonsai.png" width="300">
+<img src="bonsai_dark_long.png" width="300">
 </h1><br>
 
 # Bonsai: A Minimalist Directory Tree CLI Tool
