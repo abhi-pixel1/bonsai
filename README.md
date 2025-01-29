@@ -138,7 +138,12 @@ print(visualize_tree(tree, show_permissions=True, show_size=True))
 ```
 
 ## Contributers:
-[![Contributors](https://contrib.rocks/image?repo=abhi-pixel1/bonsai)](https://github.com/abhi-pixel1/bonsai/graphs/contributors)
+<a href="https://github.com/abhi-pixel1/bonsai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=abhi-pixel1/bonsai" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 
 ## License
 
