@@ -1,6 +1,6 @@
 import click
 import json
-from bonsai.core import generate_directory_tree, visualize_tree, get_relative_path
+from bonzai.core import generate_directory_tree, visualize_tree, get_relative_path
 
 
 @click.command(name="tree")

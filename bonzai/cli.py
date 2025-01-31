@@ -1,5 +1,5 @@
 import click
-from bonsai import commands
+from bonzai import commands
 
 @click.group()
 def cli():
