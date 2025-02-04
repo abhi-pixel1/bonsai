@@ -1,7 +1,7 @@
 [project]
 name = "bonzai"
 version = "0.1.2"
-description = ""
+description = "Python package and minimalist CLI tool for visualizing, saving, and navigating directory structures."
 authors = [
     {name = "abhi-pixel1",email = "bharadwaj.abhi.r@gmail.com"}
 ]

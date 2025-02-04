@@ -11,12 +11,11 @@ def tree(directory_path: str, show_permissions: bool, show_size: bool) ->None:
     """
     Displays the directory tree structure for the given DIRECTORY_PATH.
     """
-    generated_tree_structure = generate_directory_tree(directory_path)
-    tree_output = visualize_tree(
-        generated_tree_structure,
-        show_permissions=show_permissions,
+    generated_tree_structure = generate_directory_tree(directory_path,
+        show_permissions=show_permissions, 
         show_size=show_size
     )
+    tree_output = visualize_tree(generated_tree_structure)
     click.echo(tree_output)
 
 

@@ -9,7 +9,7 @@ T_JUNCTION = '\u251C'     # ├
 L_JUNCTION = '\u2514'     # └
 
 
-def file_permissions(filepath: str) -> str:
+def get_file_permissions(filepath: str) -> str:
     """
     Returns the file permissions for a given file or directory.
 
@@ -67,7 +67,10 @@ def get_file_size(file_path: str) -> float:
     return file_size_kb
 
 
-def generate_directory_tree(root: str) -> dict:
+def generate_directory_tree(root: str,
+    show_permissions=False,
+    show_size=False
+) -> dict:
     """
     Generates a JSON-like object representing the directory tree starting from the given root directory.
     
@@ -79,7 +82,7 @@ def generate_directory_tree(root: str) -> dict:
 
     Returns:
         dict: A nested dictionary representing the directory tree structure.
-              - Each key is a directory name.
+              - Each key is a tuple of (directory name, permissions).
               - Each value is a list containing:
                 - Nested dictionaries for subdirectories.
                 - A list of files, where each file is represented as:
@@ -93,33 +96,46 @@ def generate_directory_tree(root: str) -> dict:
         raise Exception(f"Directory '{root}' does not exist.")
     
     def _generate_directory_tree_recursive(root: str) -> dict:
-        walker = next(os.walk(root))
-        sub_dirs = walker[1]
-        files = walker[2]
+        dir_permissions = get_file_permissions(root) if show_permissions else None
+        temp_tree = {(os.path.basename(root), dir_permissions): []}
+        # temp_tree = {os.path.basename(root): []}
 
-        # Base case: No subdirectories or files
-        if not sub_dirs and not files:
-            return {os.path.basename(root): []}
+        try:
+            walker = next(os.walk(root))
+            sub_dirs = walker[1]
+            files = walker[2]
 
-        temp_tree = {os.path.basename(root): []}
+            # # Base case: No subdirectories or files
+            # if not sub_dirs and not files:
+            #     return {os.path.basename(root): []}
 
-        # Add subdirectories
-        for sub_dir in sub_dirs:
-            temp_tree[os.path.basename(root)].append(generate_directory_tree(os.path.join(root, sub_dir)))
+            # Add subdirectories
+            for sub_dir in sub_dirs:
+                temp_tree[(os.path.basename(root), dir_permissions)].append(
+                    _generate_directory_tree_recursive(os.path.join(root, sub_dir))
+                )
 
-        # Add files
-        temp_tree[os.path.basename(root)].append([ [f, file_permissions(os.path.join(root, f)), get_file_size(os.path.join(root, f))] for f in files])
-        # temp_tree[os.path.basename(root)].append(files)
+            # Add files
+            temp_tree[os.path.basename(root), dir_permissions].append([
+                [
+                    f,
+                    get_file_permissions(os.path.join(root, f)) if show_permissions else None, 
+                    get_file_size(os.path.join(root, f)) if show_size else None
+                ]
+                for f in files
+            ])
 
-        return temp_tree
+            return temp_tree
+        except:
+            return temp_tree
     
     # Call the private recursive helper function
     return _generate_directory_tree_recursive(root)
 
 def visualize_tree(
     json_tree_object: dict,
-    show_permissions=False,
-    show_size=False
+    show_permissions=True,
+    show_size=True
 )->str:
     """
     Public function to visualize a directory tree.
@@ -156,12 +172,18 @@ def visualize_tree(
             elif is_last_branch is False:
                 prefix += f"{T_JUNCTION}{HORIZONTAL * 2} "  # T-junction for intermediate branches
 
-        # Extract current directory or file name
-        dir_name = list(json_tree_object.keys())[0]
-        temp_tree = prefix + Fore.BLUE + dir_name + Style.RESET_ALL + "\n"
+        # Extract directory info
+        dir_tuple = list(json_tree_object.keys())[0]
+        dir_name, dir_permissions = dir_tuple
+
+        dir_info = Fore.BLUE + dir_name + Style.RESET_ALL  # Directory name
+        if show_permissions and dir_permissions:
+            dir_info += f" [{dir_permissions}]"
+
+        temp_tree = prefix + dir_info + "\n"
 
         # Get subdirectories and files
-        sub_dirs_and_files = json_tree_object[dir_name]
+        sub_dirs_and_files = json_tree_object[dir_tuple]
         sub_dirs = sub_dirs_and_files[:-1] if len(sub_dirs_and_files) > 1 else []
         files = sub_dirs_and_files[-1] if sub_dirs_and_files else []
 
@@ -184,74 +206,19 @@ def visualize_tree(
                     else:
                         file_prefix += "    "
                 file_prefix += f"{L_JUNCTION}{HORIZONTAL * 2} " if is_last else f"{T_JUNCTION}{HORIZONTAL * 2} "
+
                 file_info = Fore.GREEN + file[0] + Style.RESET_ALL  # File name
-                if show_permissions:
-                    file_info += f" [{file[1]}]"  # File permissions
-                if show_size:
+                if show_permissions and file[1]:
+                    file_info += f" [{file[1]}]" # File permissions
+                if show_size and file[2]:
                     file_info += f" {round(file[2])}kb"  # File size in KB
+
                 temp_tree += f"{file_prefix}{file_info}\n"
 
         return temp_tree
     
     # Call the private helper function with initial values
     return _visualize_tree_recursive(json_tree_object, is_last_branch=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def get_relative_path(destination_path: str, base_path=None) -> str:
     """
